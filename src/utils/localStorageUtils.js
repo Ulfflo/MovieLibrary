@@ -1,5 +1,3 @@
-// localStorageUtils.js
-
 // Save Redux state to localStorage
 export const saveStateToLocalStorage = (state) => {
   try {
@@ -15,11 +13,13 @@ export const loadStateFromLocalStorage = () => {
   try {
     const serializedState = localStorage.getItem("favorites");
     if (serializedState === null) {
-      return undefined; // No saved state, return undefined to use initial state
+      // Return a valid initial state with an empty items array
+      return { items: [] };
     }
     return JSON.parse(serializedState);
   } catch (err) {
     console.error("Could not load state", err);
-    return undefined;
+    // Return a valid initial state with an empty items array if there's an error
+    return { items: [] };
   }
 };

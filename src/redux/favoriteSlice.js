@@ -7,9 +7,17 @@ const favoritesSlice = createSlice({
   },
   reducers: {
     addFavorite: (state, action) => {
+      // Ensure state.items is always an array
+      if (!Array.isArray(state.items)) {
+        state.items = [];
+      }
       state.items.push(action.payload); // Add movie to favorites
     },
     removeFavorite: (state, action) => {
+      // Ensure state.items is an array before using filter
+      if (!Array.isArray(state.items)) {
+        state.items = [];
+      }
       state.items = state.items.filter((item) => item.id !== action.payload.id); // Remove movie from favorites
     },
   },

@@ -45,7 +45,8 @@ const MovieDetails = () => {
 
   // Check if the movie is in favorites
   const isFavorite =
-    movie && favorites.some((favMovie) => favMovie.id === movie.id);
+    movie && Array.isArray(favorites) && favorites.some((favMovie) => favMovie.id === movie.id);
+
 
   // Handle adding/removing favorites
   const handleFavoriteClick = () => {
