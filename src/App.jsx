@@ -5,8 +5,14 @@ import FavoritesPage from "./pages/Favorites";
 import NavigationMenu from "./components/NavigationMenu";
 import { Provider } from 'react-redux'; // Import the Provider
 import store from './redux/store'; // Import the store
+import TagManager from 'react-gtm-module'; // Import GTM module
 
 const App = () => {
+  useEffect(() => {
+    // Initialize GTM with your container ID
+    TagManager.initialize({ gtmId: "GTM-P9D93L28" });
+  }, []);
+
   return (
     <Provider store={store}>
       <Router>

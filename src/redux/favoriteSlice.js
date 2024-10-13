@@ -7,19 +7,38 @@ const favoritesSlice = createSlice({
   },
   reducers: {
     addFavorite: (state, action) => {
-      // Ensure state.items is always an array
       if (!Array.isArray(state.items)) {
         state.items = [];
       }
-      // Add movie to favorites
       state.items.push(action.payload);
+
+      // Push event to dataLayer for GTM
+      if (window && window.dataLayer) {
+        window.dataLayer.push({
+          event: "add_to_favorite", // Custom event name for GTM
+          favoriteItem: {
+            id: action.payload.id,
+            title: action.payload.title, // Include any additional data you want
+          },
+        });
+      }
     },
     removeFavorite: (state, action) => {
-      // Ensure state.items is an array before using filter
       if (!Array.isArray(state.items)) {
         state.items = [];
       }
       state.items = state.items.filter((item) => item.id !== action.payload.id);
+
+      // Push event to dataLayer for GTM
+      if (window && window.dataLayer) {
+        window.dataLayer.push({
+          event: "remove_from_favorite", // Custom event name for GTM
+          favoriteItem: {
+            id: action.payload.id,
+            title: action.payload.title, // Include any additional data you want
+          },
+        });
+      }
     },
   },
 });
