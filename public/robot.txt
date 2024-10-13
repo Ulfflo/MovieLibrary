@@ -1,0 +1,6 @@
+User-agent: *
+Disallow: 
+
+
+Sitemap: https://movie-library-roan-three.vercel.app/sitemap.xml
+
