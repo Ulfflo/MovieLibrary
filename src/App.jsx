@@ -6,6 +6,7 @@ import NavigationMenu from "./components/NavigationMenu";
 import { Provider } from 'react-redux'; // Import the Provider
 import store from './redux/store'; // Import the store
 import TagManager from 'react-gtm-module'; // Import GTM module
+import { useEffect } from "react";
 
 const App = () => {
   useEffect(() => {
