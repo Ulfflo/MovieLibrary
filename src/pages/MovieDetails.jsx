@@ -12,17 +12,19 @@ import {
   removeFavorite,
   selectFavorites,
 } from "../redux/favoriteSlice";
-import Button from "../components/Button"; // Import the Button component
+import { setRating, selectRating } from "../redux/ratingsSlice"; // Import rating actions and selector
+import Button from "../components/Button";
+import Rating from "../components/Rating";
 
 const MovieDetails = () => {
-  const { id } = useParams(); // Get the movie ID from the URL
+  const { id } = useParams();
   const dispatch = useDispatch();
   const movie = useSelector(selectMovie);
   const loading = useSelector(selectLoading);
   const error = useSelector(selectError);
   const favorites = useSelector(selectFavorites);
+  const rating = useSelector((state) => selectRating(state, id)); // Get rating from ratingsSlice
 
-  // Fetch movie details when component mounts
   useEffect(() => {
     if (id) {
       dispatch(fetchMovieById(id));
@@ -31,30 +33,23 @@ const MovieDetails = () => {
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
-
-  // Ensure movie object is loaded before accessing its properties
   if (!movie) return null;
 
-  // Extract director from crew
-  const director = movie?.credits?.crew?.find(
-    (member) => member.job === "Director"
-  );
-
-  // Extract top 5 actors from cast
+  const director = movie?.credits?.crew?.find((member) => member.job === "Director");
   const topActors = movie?.credits?.cast?.slice(0, 5);
 
-  // Check if the movie is in favorites
-  const isFavorite =
-    movie && Array.isArray(favorites) && favorites.some((favMovie) => favMovie.id === movie.id);
+  const isFavorite = favorites.some((favMovie) => favMovie.id === movie.id);
 
-
-  // Handle adding/removing favorites
   const handleFavoriteClick = () => {
     if (isFavorite) {
-      dispatch(removeFavorite(movie)); // If it's a favorite, remove it
+      dispatch(removeFavorite(movie));
     } else {
-      dispatch(addFavorite(movie)); // If it's not, add it
+      dispatch(addFavorite(movie));
     }
+  };
+
+  const handleRatingChange = (newRating) => {
+    dispatch(setRating({ id: movie.id, rating: newRating }));
   };
 
   return (
@@ -71,7 +66,6 @@ const MovieDetails = () => {
             <p className="text-gray-500">{movie.release_date}</p>
             <p className="mt-4">{movie.overview}</p>
 
-            {/* Display director */}
             {director && (
               <p className="mt-4">
                 <strong>Director: </strong>
@@ -79,7 +73,6 @@ const MovieDetails = () => {
               </p>
             )}
 
-            {/* Display top actors */}
             {topActors && (
               <div className="mt-4">
                 <strong>Cast:</strong>
@@ -92,19 +85,21 @@ const MovieDetails = () => {
                 </ul>
               </div>
             )}
-
-            {/* Play Film Button */}
+            <div className="mt-4">
+            <Rating rating={rating} onRatingChange={handleRatingChange} />
+            </div>
+            <div className="flex items-center mt-8 gap-2">
             <Button label="Play film" />
 
-            {/* Toggle button based on favorite status */}
             <Button
               label={isFavorite ? "Remove from Favorites" : "Add to Favorites"}
               color={isFavorite ? "bg-red-500" : "bg-green-500"}
               hoverColor={
                 isFavorite ? "hover:bg-red-600" : "hover:bg-green-600"
               }
-              onClick={handleFavoriteClick} // onClick to toggle favorites
+              onClick={handleFavoriteClick}
             />
+            </div>
           </div>
         </div>
       )}
@@ -113,3 +108,4 @@ const MovieDetails = () => {
 };
 
 export default MovieDetails;
+
