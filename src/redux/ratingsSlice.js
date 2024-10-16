@@ -1,22 +1,25 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const ratingsSlice = createSlice({
-  name: "ratings",
+  name: "ratings", 
   initialState: {
-    ratings: {}, // Object to store ratings with movie ID as key
+    ratings: {}, 
   },
   reducers: {
+    
     setRating: (state, action) => {
-      const { id, rating } = action.payload;
-      state.ratings[id] = rating; // Set the rating for the movie with the given ID
+      const { id, rating } = action.payload; // Hämta film-ID och betyg från payload
+      state.ratings[id] = rating; // Sätt betyget för filmen med det angivna ID:t, "update" operation
     },
   },
 });
 
-// Export actions and reducer
-export const { setRating } = ratingsSlice.actions;
-export default ratingsSlice.reducer;
 
-// Selector to get the rating for a specific movie
+export const { setRating } = ratingsSlice.actions; 
+export default ratingsSlice.reducer; 
+
+// Selector för att hämta betyget för en specifik film
 export const selectRating = (state, movieId) =>
-  state.ratings.ratings[movieId] || 0;
+// Returnera betyget för filmen, eller 0 om inget betyg finns, "read" operation
+  state.ratings.ratings[movieId] || 0; 
+
