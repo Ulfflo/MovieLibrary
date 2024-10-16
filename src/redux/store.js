@@ -1,31 +1,31 @@
 import { configureStore } from "@reduxjs/toolkit";
-import movieReducer from "./movieSlice";
-import movieDetailsReducer from "./movieDetailsSlice";
-import favoritesReducer from "./favoriteSlice";
-import ratingsReducer from "./ratingsSlice"; // Import the ratings slice
+import movieReducer from "./movieSlice"; 
+import movieDetailsReducer from "./movieDetailsSlice"; 
+import favoritesReducer from "./favoriteSlice"; 
+import ratingsReducer from "./ratingsSlice"; 
 import {
-  loadStateFromLocalStorage,
-  saveStateToLocalStorage,
-} from "../utils/localStorageUtils"; // Import localStorage utils
+  loadStateFromLocalStorage, 
+  saveStateToLocalStorage, 
+} from "../utils/localStorageUtils"; 
 
-// Load the initial state from localStorage
-const preloadedState = loadStateFromLocalStorage(); // Load the entire state
+// Ladda initialt tillstånd från localStorage
+const preloadedState = loadStateFromLocalStorage(); 
 
-// Configure the store with all reducers and the preloaded state
+
 const store = configureStore({
   reducer: {
-    movies: movieReducer,
-    movieDetails: movieDetailsReducer,
-    favorites: favoritesReducer,
-    ratings: ratingsReducer,
+    movies: movieReducer, 
+    movieDetails: movieDetailsReducer, 
+    favorites: favoritesReducer, 
+    ratings: ratingsReducer, 
   },
-  preloadedState, // Preload the state with favorites and ratings from localStorage
+  preloadedState, // Förladda tillståndet med favoriter och betyg från localStorage
 });
 
-// Subscribe to store changes to persist both favorites and ratings to localStorage
+// Prenumerera på store-ändringar för att spara både favoriter och betyg i localStorage
 store.subscribe(() => {
-  const state = store.getState(); // Get the entire Redux state
-  saveStateToLocalStorage(state); // Save the entire state to localStorage
+  const state = store.getState(); // Hämta hela Redux-tillståndet
+  saveStateToLocalStorage(state); // Spara hela tillståndet i localStorage
 });
 
-export default store;
+export default store; 

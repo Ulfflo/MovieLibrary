@@ -1,55 +1,58 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  fetchPopularMovies,
-  selectMovies,
-  selectLoading,
-  selectError,
-  searchMovies, // Import the searchMovies thunk
+  fetchPopularMovies, 
+  selectMovies, 
+  selectLoading, 
+  selectError, 
+  searchMovies, 
 } from "../redux/movieSlice";
-import SearchBar from "../components/SearchBar";
-import MovieList from "../components/MovieList";
+import SearchBar from "../components/SearchBar"; 
+import MovieList from "../components/MovieList"; 
 
 
 const HomePage = () => {
-  const dispatch = useDispatch();
-  const movies = useSelector(selectMovies);
-  const loading = useSelector(selectLoading);
-  const error = useSelector(selectError);
+  const dispatch = useDispatch(); 
+  const movies = useSelector(selectMovies); 
+  const loading = useSelector(selectLoading); 
+  const error = useSelector(selectError); 
 
-  // Fetch popular movies when the component mounts
+
   useEffect(() => {
-    dispatch(fetchPopularMovies()); // Dispatch the thunk to fetch movies
-  }, [dispatch]);
+    dispatch(fetchPopularMovies()); // Skickar åtgärden för att hämta populära filmer
+  }, [dispatch]); // useEffect körs om dispatch förändras
 
-  // Debounced search function
+  // Debounce-funktion för att fördröja sökningar så att de inte sker för ofta
   const debouncedSearchMovies = debounce((query) => {
     if (query) {
-      dispatch(searchMovies(query)); // Call the thunk to search for movies
+      dispatch(searchMovies(query)); // Om det finns en sökfråga, sök efter filmer
     } else {
-      dispatch(fetchPopularMovies()); // Fetch popular movies if query is empty
+      dispatch(fetchPopularMovies()); // Om sökfrågan är tom, hämta populära filmer igen
     }
-  }, 300); // 300ms delay for debouncing
+  }, 300); // Fördröjning på 300 ms
 
   return (
+   
+    <div className="container mx-auto">
+      
+      <SearchBar onSearch={debouncedSearchMovies} />
     
-
-      <div className="container mx-auto">
-        <SearchBar onSearch={debouncedSearchMovies} />
-        {loading && <p>Loading...</p>}
-        {error && <p>Error: {error}</p>}
-        <MovieList movies={movies} />
-      </div>
-  )
+      {loading && <p>Loading...</p>}
+   
+      {error && <p>Error: {error}</p>}
+   
+      <MovieList movies={movies} />
+    </div>
+  );
 };
 
-// Debounce function
+// Debounce-funktion som gör att en funktion inte anropas för ofta (fördröjer anropet)
 const debounce = (func, delay) => {
-  let timeoutId;
+  let timeoutId; // Sparar timeout-id
   return function (...args) {
-    if (timeoutId) clearTimeout(timeoutId);
+    if (timeoutId) clearTimeout(timeoutId); // Om det redan finns en timeout, avbryt den
     timeoutId = setTimeout(() => {
-      func.apply(null, args);
+      func.apply(null, args); // Kör funktionen efter fördröjningen
     }, delay);
   };
 };

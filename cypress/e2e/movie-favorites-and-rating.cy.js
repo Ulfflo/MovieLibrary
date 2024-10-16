@@ -1,56 +1,54 @@
+describe("Tester för favoritfilmer och betyg", () => {
+  // Test 1: Funktionalitet för att favoritisera filmer
+  describe("Favorit av en film", () => {
+    it("ska tillåta en användare att lägga till och ta bort en film från favoriter", () => {
+      // Besök filmsidan
+      cy.visit("/movies/1184918");
 
+      // Kontrollera om filmtiteln visas
+      cy.get("h1").contains("The Wild Robot");
 
-describe("Movie Favorites and Rating Tests", () => {
-  // Test 1: Favorite functionality
-  describe("Favorite a movie", () => {
-    it("should allow a user to add and remove a movie from favorites", () => {
-      // Visit the movie details page
-      cy.visit("/movies/1184918"); // Replace with the actual movie ID or path in your app
+      // Klicka på "Add to Favourites"
+      cy.get("button").contains("Add to Favourites").click();
 
-      // Check if the movie title is displayed
-      cy.get("h1").contains("The Wild Robot"); // Adjust the title to match the movie
+      // Kontrollera att knappen nu säger "Remove from Favourites"
+      cy.get("button").contains("Remove from Favourites");
 
-      // Click on "Add to Favorites"
-      cy.get("button").contains("Add to Favorites").click();
-
-      // Check that the button now says "Remove from Favorites"
-      cy.get("button").contains("Remove from Favorites");
-
-      // Navigate to the favorites page
+      // Navigera till favoritsidan
       cy.visit("/favorites");
 
-      // Verify the movie is listed in favorites
+      // Verifiera att filmen finns listad bland favoriter
       cy.get("h3").contains("The Wild Robot");
 
-      // Click "Remove" to remove it from favorites
+      // Klicka på "Remove" för att ta bort den från favoriter
       cy.get("button").contains("Remove").click();
 
-      // Ensure the movie is no longer in the favorites list
+      // Se till att filmen inte längre finns i listan över favoriter
       cy.get("h3").should("not.exist");
     });
   });
 
-  // Test 2: Rating functionality
-  describe("Rate a movie", () => {
-    it("should allow a user to rate a movie", () => {
-      // Visit the movie details page
-      cy.visit("/movies/823219"); // Replace with the actual movie ID or path in your app
+  // Test 2: Funktionalitet för att betygsätta filmer
+  describe("Betygsätta en film", () => {
+    it("ska tillåta en användare att betygsätta en film", () => {
+      // Besök filmsidan
+      cy.visit("/movies/823219"); 
 
-      // Check if the movie title is displayed
-      cy.get("h1").contains("Flow"); // Adjust the title to match the movie
+      // Kontrollera om filmtiteln visas
+      cy.get("h1").contains("Flow"); 
 
-      // Click on the 3rd star to set a rating of 3
-      cy.get(".cursor-pointer").eq(2).click(); // Assuming stars are represented by this class
+      // Klicka på den 3:e stjärnan för att sätta ett betyg på 3
+      cy.get(".cursor-pointer").eq(2).click(); 
 
-      // Verify that the 3 stars are now yellow (or the selected color)
+      // Verifiera att de 3 stjärnorna nu är gula
       cy.get(".cursor-pointer").eq(0).should("have.class", "text-yellow-500");
       cy.get(".cursor-pointer").eq(1).should("have.class", "text-yellow-500");
       cy.get(".cursor-pointer").eq(2).should("have.class", "text-yellow-500");
 
-      // Reload the page to check that the rating persists
+      // Ladda om sidan för att kontrollera att betyget finns kvar
       cy.reload();
 
-      // Verify that the rating is still applied after the reload
+      // Verifiera att betyget fortfarande är tillämpat efter omstart
       cy.get(".cursor-pointer").eq(2).should("have.class", "text-yellow-500");
     });
   });

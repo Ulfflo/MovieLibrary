@@ -10,7 +10,7 @@ const Button = ({
   return (
     <button
       onClick={onClick}
-      className={`${color} text-white px-4 py-2 rounded-md ${hoverColor} ${
+      className={`${color} text-white px-4 py-2 sm:px-6 lg:px-8 rounded-md ${hoverColor} ${
         fullWidthOnMobile ? "w-full sm:w-auto" : "w-auto"
       }`}
     >

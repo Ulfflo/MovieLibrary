@@ -1,72 +1,46 @@
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { removeFavorite } from "../redux/favoriteSlice";
-import { setRating, selectRating } from "../redux/ratingsSlice"; // Import rating actions and selector
-import Button from "./Button";
-import Rating from "./Rating";
+import { setRating } from "../redux/ratingsSlice";
+import FavoriteItem from "./FavoriteItem";
+
 
 const FavoritesList = ({ favorites }) => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch(); 
 
+  
   const handleRemoveClick = (movie) => {
-    dispatch(removeFavorite(movie));
+    dispatch(removeFavorite(movie)); // Anropa Redux för att ta bort en film från favoriter
   };
 
+  
   const handleRatingChange = (movie, rating) => {
-    dispatch(setRating({ id: movie.id, rating }));
+    dispatch(setRating({ id: movie.id, rating })); // Anropa Redux för att uppdatera betyget för en film
   };
 
   return (
+ 
     <div className="p-4">
+  
       <h2 className="text-xl font-bold mb-4">My Favourites</h2>
+
       {favorites.length === 0 ? (
+        // Om inga favoriter finns, visa ett meddelande
         <p>No favourites yet.</p>
       ) : (
+        // Om favoriter finns, visa dem i ett rutnät
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
           {favorites.map((movie) => (
+            // Skapa en FavoriteItem-komponent för varje favoritfilm
             <FavoriteItem
-              key={movie.id}
-              movie={movie}
-              handleRemoveClick={handleRemoveClick}
-              handleRatingChange={handleRatingChange}
+              key={movie.id} // Nyckel baserad på filmens id för att unikt identifiera varje element
+              movie={movie} // Skicka vidare filmen som prop
+              handleRemoveClick={handleRemoveClick} // Skicka vidare borttagningsfunktionen som prop
+              handleRatingChange={handleRatingChange} // Skicka vidare funktionen för betygsändring som prop
             />
           ))}
         </div>
       )}
-    </div>
-  );
-};
-
-// Separate component for each favorite item
-const FavoriteItem = ({ movie, handleRemoveClick, handleRatingChange }) => {
-  const dispatch = useDispatch();
-  const rating = useSelector((state) => selectRating(state, movie.id)); // Get the rating from ratingsSlice
-
-  return (
-    <div className="bg-white shadow-md rounded-md p-4 flex flex-col justify-between">
-      <h3 className="font-bold">{movie.title}</h3>
-      <img
-        src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-        alt={movie.title}
-        className="w-full h-60 sm:h-72 lg:h-[400px] object-cover"
-      />
-      <div className="mt-4">
-        {/* Star rating system */}
-        <Rating
-          rating={rating}
-          onRatingChange={(newRating) => handleRatingChange(movie, newRating)}
-        />
-        <div className="flex flex-col sm:flex-row justify-between items-center gap-2">
-          <Button label="Play Film" fullWidth={true} />
-          <Button
-            label="Remove"
-            color="bg-red-500"
-            hoverColor="hover:bg-red-600"
-            fullWidth={true}
-            onClick={() => handleRemoveClick(movie)}
-          />
-        </div>
-      </div>
     </div>
   );
 };

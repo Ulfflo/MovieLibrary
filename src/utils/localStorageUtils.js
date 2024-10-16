@@ -1,32 +1,31 @@
-// Save Redux state to localStorage
+// Spara Redux-tillståndet till localStorage
 export const saveStateToLocalStorage = (state) => {
   try {
-    const serializedState = JSON.stringify(state); // Serialize the entire state
-    localStorage.setItem("reduxState", serializedState); // Use a single key for the entire state
+    const serializedState = JSON.stringify(state); // Serialisera hela tillståndet till en JSON-sträng
+    localStorage.setItem("reduxState", serializedState); // Använd en enda nyckel för att lagra hela tillståndet
   } catch (err) {
-    console.error("Could not save state", err);
+    console.error("Kunde inte spara tillstånd", err); 
   }
 };
 
-// Load Redux state from localStorage
+// Ladda Redux-tillståndet från localStorage
 export const loadStateFromLocalStorage = () => {
   try {
-    const serializedState = localStorage.getItem("reduxState"); // Load the entire state
+    const serializedState = localStorage.getItem("reduxState"); // Ladda hela tillståndet från localStorage
     if (serializedState === null) {
-      // Return a valid initial state with empty items arrays for both favorites and ratings
+      // Returnera ett giltigt initialt tillstånd med tomma items-arrayer för både favoriter och betyg
       return {
-        favorites: { items: [] },
-        ratings: { ratings: {} },
+        favorites: { items: [] }, // Tom lista för favoriter
+        ratings: { ratings: {} }, // Tomt objekt för betyg
       };
     }
-    return JSON.parse(serializedState); // Parse and return the state
+    return JSON.parse(serializedState); // Parsar och returnerar det sparade tillståndet
   } catch (err) {
-    console.error("Could not load state", err);
-    // Return a valid initial state if there's an error
+    console.error("Kunde inte ladda tillstånd", err); // Logga felmeddelande om det inte går att ladda
+    // Returnera ett giltigt initialt tillstånd om det uppstår ett fel
     return {
-      favorites: { items: [] },
-      ratings: { ratings: {} },
+      favorites: { items: [] }, // Tom lista för favoriter
+      ratings: { ratings: {} }, // Tomt objekt för betyg
     };
   }
 };
-

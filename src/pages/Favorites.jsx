@@ -2,7 +2,7 @@ import { useSelector } from "react-redux"; // Redux för att hämta favoriter
 import FavoritesList from "../components/FavoritesList";
 
 const FavoritesPage = () => {
-  // Hämta favoriter från Redux state (eller en annan statehantering)
+  // Hämta favoriter från Redux state
   const favorites = useSelector((state) => state.favorites.items);
 
   return (

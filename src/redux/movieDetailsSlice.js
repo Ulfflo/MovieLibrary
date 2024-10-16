@@ -1,67 +1,76 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-// Add fetchMovieById async thunk
+// Skapa en asynkron thunk för att hämta en film baserat på dess ID
 export const fetchMovieById = createAsyncThunk(
   "movies/fetchMovieById",
   async (id) => {
+   
     const options = {
       method: "GET",
       headers: {
-        accept: "application/json",
-        Authorization:
-          "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkOWEzYmM1YTQ5MzFlYjA0ZDVlMjA5ODEwMzRiMDVjOSIsIm5iZiI6MTcyODM3OTUxMi45Mzk1NTcsInN1YiI6IjY3MDRkN2MwNWMwMGEyZDQ0ZWMwMDgwMCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.qLp5JPdCrw9SQMZElEecH13adx0Uq4nfYf9Qc7fKOkQ",
+        accept: "application/json", 
+        Authorization: `Bearer ${import.meta.env.VITE_TMDB_API_TOKEN}`, 
       },
     };
 
-    // Fetch movie details
+    
     const movieResponse = await fetch(
-      `https://api.themoviedb.org/3/movie/${id}`,
+      `https://api.themoviedb.org/3/movie/${id}`, // URL för att hämta filminformation
       options
     );
 
-    // Fetch credits (for director and cast)
+   
     const creditsResponse = await fetch(
-      `https://api.themoviedb.org/3/movie/${id}/credits`,
+      `https://api.themoviedb.org/3/movie/${id}/credits`, // URL för att hämta credits (regissör och rollista)
       options
     );
 
+   
     if (!movieResponse.ok || !creditsResponse.ok) {
-      throw new Error(`HTTP error! status: ${movieResponse.status}`);
+      throw new Error(`HTTP error! status: ${movieResponse.status}`); 
     }
 
+    
     const movieData = await movieResponse.json();
     const creditsData = await creditsResponse.json();
 
-    return { ...movieData, credits: creditsData }; // Return both movie data and credits
+    // Returnera både filminformationen och credits som ett sammanfogat objekt
+    return { ...movieData, credits: creditsData };
   }
 );
 
+
 const movieDetailsSlice = createSlice({
-  name: "movieDetails",
+  name: "movieDetails", 
   initialState: {
-    movie: null,
-    loading: false,
-    error: null,
+    movie: null, 
+    loading: false, 
+    error: null, 
   },
   extraReducers: (builder) => {
     builder
+      
       .addCase(fetchMovieById.pending, (state) => {
-        state.loading = true;
-        state.error = null;
+        state.loading = true; 
+        state.error = null; 
       })
+      
       .addCase(fetchMovieById.fulfilled, (state, action) => {
-        state.loading = false;
-        state.movie = action.payload;
+        state.loading = false; 
+        state.movie = action.payload; 
       })
+     
       .addCase(fetchMovieById.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.error.message;
+        state.loading = false; 
+        state.error = action.error.message; 
       });
   },
 });
 
-export const selectMovie = (state) => state.movieDetails.movie;
-export const selectLoading = (state) => state.movieDetails.loading;
-export const selectError = (state) => state.movieDetails.error;
 
+export const selectMovie = (state) => state.movieDetails.movie; // Hämta den valda filmen
+export const selectLoading = (state) => state.movieDetails.loading; // Hämta laddningstillståndet
+export const selectError = (state) => state.movieDetails.error; // Hämta eventuella fel
+
+// Exportera reducer för att inkludera den i store-konfigurationen
 export default movieDetailsSlice.reducer;

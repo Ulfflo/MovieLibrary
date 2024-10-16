@@ -1,6 +1,5 @@
 User-agent: *
-Disallow: 
-
+Disallow: /api/
+Allow: /
 
 Sitemap: https://movie-library-roan-three.vercel.app/sitemap.xml
-

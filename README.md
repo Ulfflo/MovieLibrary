@@ -147,6 +147,7 @@ För att spara användarens favoritfilmer och betyg används localStorage. Detta
 Favoriter och betyg sparas i localStorage genom saveStateToLocalStorage-funktionen.
 Vid sidladdning hämtas dessa värden med loadStateFromLocalStorage.
 
+
 ## Versionshantering med Git
 
 Projektet följer en strukturerad versionshantering med Git. Minst fem commits och användning av branching för att hantera nya funktioner.
